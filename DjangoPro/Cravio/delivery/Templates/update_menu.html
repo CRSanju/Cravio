@@ -1,58 +1,270 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Update Menu · Cravio</title>
+    <link href="{% static 'style.css' %}" rel="stylesheet">
 </head>
+
 <body>
-    <!-- show current menu -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Item name</th>
-                <th>Picture</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Is veg/</th>
-            </tr>
-        </thead>
-        <tbody>
-            {%  for item in itemList %}
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>
-                        <img src="{{ item.picture }}">
-                    </td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.price }}</td>
-                    <td>{{ item.vegeterian }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
+    <!-- NAVBAR -->
+    <div class="nav-wrap">
+        <nav class="nav">
+            <div class="nav-brand">
+                <div class="nav-logo-box">
+                    <svg fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    </svg>
+                </div>
 
-    <!-- add food item (form) -->
-    <h2>Add Menu Item</h2>
-    <form action="{% url 'update_menu' restaurant.id %}" method="post">
-        {% csrf_token %}
-        <label for="name">Item Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+                <div>
+                    <div class="nav-wordmark">Cravio</div>
+                    <div class="nav-tagline">Restaurant Dashboard</div>
+                </div>
+            </div>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea><br><br>
+            <div class="nav-right">
+                <a href="{% url 'admin_home' %}" class="btn-nav">
+                    Back
+                </a>
+            </div>
+        </nav>
+    </div>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" step="0.01" required><br><br>
+    <!-- PAGE -->
+    <main class="page-wrap">
 
-        <label for="vegeterian">Vegetarian:</label>
-        <input type="checkbox" id="vegeterian" name="vegeterian"><br><br>
+        <!-- HEADER -->
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">
+                        Update Menu
+                    </h1>
 
-        <label for="picture">Image URL:</label>
-        <input type="url" id="picture" name="picture"><br><br>
+                    <p class="section-subtitle">
+                        Manage dishes visible to customers and add new items instantly.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-        <button type="submit">Add Item</button>
-    </form>
+        <!-- CURRENT MENU -->
+        <section class="section">
+
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Current Menu</h2>
+
+                    <p class="section-subtitle">
+                        Existing food items available in your restaurant.
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-card">
+
+                <div class="table-wrapper">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Image</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for item in itemList %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>{{ item.name }}</strong>
+                                </td>
+
+                                <td>
+                                    <img src="{{ item.picture }}"
+                                         alt="{{ item.name }}"
+                                         class="table-img">
+                                </td>
+
+                                <td>
+                                    {{ item.description }}
+                                </td>
+
+                                <td>
+                                    ₹{{ item.price }}
+                                </td>
+
+                                <td>
+
+                                    {% if item.vegeterian %}
+                                        <span class="pill pill-veg">
+                                            Veg
+                                        </span>
+                                    {% else %}
+                                        <span class="pill pill-nonveg">
+                                            Non-Veg
+                                        </span>
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ADD MENU ITEM -->
+        <section class="section">
+
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">
+                        Add New Item
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Add fresh dishes to your restaurant menu.
+                    </p>
+                </div>
+            </div>
+
+            <div class="auth-card"
+                 style="max-width: 700px; padding: 1.8rem;">
+
+                <form action="{% url 'update_menu' restaurant.id %}"
+                      method="post"
+                      class="form-grid">
+
+                    {% csrf_token %}
+
+                    <!-- NAME -->
+                    <div class="field">
+                        <label for="name" class="field-label">
+                            Item Name
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               class="field-input"
+                               placeholder="Enter item name"
+                               required>
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="field">
+
+                        <label for="description"
+                               class="field-label">
+
+                            Description
+
+                        </label>
+
+                        <textarea id="description"
+                                  name="description"
+                                  class="field-textarea"
+                                  placeholder="Describe the dish"
+                                  required></textarea>
+
+                    </div>
+
+                    <!-- PRICE -->
+                    <div class="field">
+
+                        <label for="price"
+                               class="field-label">
+
+                            Price
+
+                        </label>
+
+                        <input type="number"
+                               id="price"
+                               name="price"
+                               class="field-input"
+                               step="0.01"
+                               placeholder="Enter price"
+                               required>
+
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="field">
+
+                        <label for="picture"
+                               class="field-label">
+
+                            Image URL
+
+                        </label>
+
+                        <input type="url"
+                               id="picture"
+                               name="picture"
+                               class="field-input"
+                               placeholder="https://example.com/image.jpg">
+
+                    </div>
+
+                    <!-- VEG -->
+                    <div class="field">
+
+                        <label class="field-label">
+
+                            <input type="checkbox"
+                                   id="vegeterian"
+                                   name="vegeterian"
+                                   style="margin-right: 0.45rem;">
+
+                            Vegetarian Item
+
+                        </label>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="form-footer">
+
+                        <button type="submit"
+                                class="btn-primary btn-block">
+
+                            Add Menu Item
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </body>
 </html>
+```

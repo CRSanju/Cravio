@@ -1,40 +1,93 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Show Restaurants</title>
-  </head>
-  <body>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Restaurant name</th>
-          <th>Picture</th>
-          <th>Cuisine</th>
-          <th>Rating</th>
-          <th>Operations</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in restaurantList %}
-        <tr>
-          <td>{{ r.name }}</td>
-          <td>
-            <img src="{{ r.picture }}" />
-          </td>
-          <td>{{ r.cuisine }}</td>
-          <td>{{ r.rating }}</td>
-          <td>
-            <a href="{% url 'open_update_restaurant' r.id %}"> Update Restaurant Info </a>
-            <br />
-            <a href="{% url 'delete_restaurant' r.id %}"> Delete Restaurant </a>
-            <br />
-            <a href="{% url 'open_update_menu' r.id %}"> Update Menu </a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Restaurants · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
+
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Admin console</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <a href="{% url 'open_add_restaurant' %}" class="btn-nav">+ Add restaurant</a>
+      </div>
+    </nav>
+  </div>
+
+  <main class="page-wrap">
+    <div class="page-header">
+      <h1 class="page-title">All restaurants</h1>
+      <p class="page-sub">Manage details, menus and status from a single place.</p>
+    </div>
+
+    {% if restaurantList %}
+    <div class="manage-card">
+      <table class="manage-table">
+        <thead>
+          <tr>
+            <th>Restaurant</th>
+            <th>Image</th>
+            <th>Cuisine</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in restaurantList %}
+          <tr>
+            <td><strong>{{ r.name }}</strong></td>
+            <td><img src="{{ r.picture }}" alt="{{ r.name }}" class="manage-thumb" /></td>
+            <td>{{ r.cuisine }}</td>
+            <td><span class="rating-badge">★ {{ r.rating }}</span></td>
+            <td>
+              <div class="manage-actions">
+                <a href="{% url 'open_update_restaurant' r.id %}" class="act-link">Update info</a>
+                <a href="{% url 'open_update_menu' r.id %}" class="act-link">Edit menu</a>
+                <a href="{% url 'delete_restaurant' r.id %}" class="act-link act-link--del">Delete</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      </div>
+      <div class="empty-title">No restaurants added yet</div>
+      <div class="empty-body">Add your first restaurant to get started.</div>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+        </div>
+        <span class="footer-name">Cravio</span>
+      </div>
+      <span>Admin panel · Built with Django</span>
+    </div>
+  </footer>
+
+</body>
 </html>

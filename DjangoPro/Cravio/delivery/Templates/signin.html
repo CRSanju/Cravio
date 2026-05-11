@@ -1,27 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGN IN</title>
-       {% load static %}
-    <link href="{% static 'style.css' %}" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body>
-    <h3>SIGN IN BELOW:</h3>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+          <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+        </svg>
+      </div>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Sign in to Cravio to explore restaurants and your saved cart.</p>
 
-    <form action = "{%url 'signin' %}" method="post">
+      <form action="{% url 'signin' %}" method="post" class="form-stack">
         {% csrf_token %}
-        <label>Username</label>
-        <input type="text" name="username">
-        <br><br>
-        <label>Password</label>
-        <input type="password" name="password">
-        <br><br>
-
-        <br><br>
-        <button type="submit">SIGN IN</button>
-    </form>
-    
+        <div class="field">
+          <label class="field-label">Username</label>
+          <input type="text" name="username" class="field-input" placeholder="Your username" required autofocus />
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input type="password" name="password" class="field-input" placeholder="••••••••" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-block">Sign in</button>
+          <p class="form-hint">New to Cravio? <a href="{% url 'open_signup' %}">Create a free account</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

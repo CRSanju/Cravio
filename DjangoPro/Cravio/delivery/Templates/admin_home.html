@@ -1,14 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body>
-    <h1>Welcome to Admin Page</h1>
-    <a href="open_add_restaurant">Add New restaurant</a>
-    <br>
-    <a href="open_show_restaurant">Show Restaurant</a>
+
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Admin console</div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="page-wrap page-wrap--narrow">
+    <div class="page-header">
+      <h1 class="page-title">Restaurant management</h1>
+      <p class="page-sub">Curate restaurants and keep menus fresh. Changes appear instantly in the customer experience.</p>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-action-card">
+        <div class="admin-action-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="admin-action-title">Add new restaurant</div>
+        <div class="admin-action-body">Register a new kitchen or restaurant to the platform. Fill in the details and it goes live immediately.</div>
+        <a href="open_add_restaurant" class="btn-primary" style="width:fit-content">Add restaurant</a>
+      </div>
+      <div class="admin-action-card">
+        <div class="admin-action-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="admin-action-title">Manage restaurants</div>
+        <div class="admin-action-body">Update details, edit menus, or remove restaurants from the platform. All in one place.</div>
+        <a href="open_show_restaurant" class="btn-secondary" style="width:fit-content">View all</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+        </div>
+        <span class="footer-name">Cravio</span>
+      </div>
+      <span>Admin panel · Built with Django</span>
+    </div>
+  </footer>
+
 </body>
 </html>

@@ -1,39 +1,111 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    Hi {{username}} here are you items
-    <!-- show current menu -->
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Item Image</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in itemList %}
-        <tr>
-          <td>
-            <img src="{{ item.picture }}" />
-          </td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      <h2>Total price : {{total_price}}</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
 
-      <form action="{% url 'checkout' username %}">
-        <input type="submit" value="CHECK OUT" />
-      </form>
-    </table>
-  </body>
-</html> 
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Review your order</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-user">
+          <div class="nav-avatar">{{ username|slice:":1"|upper }}</div>
+          {{ username }}
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="page-wrap page-wrap--narrow">
+    <div class="page-header">
+      <h1 class="page-title">Your cart</h1>
+      <p class="page-sub">Make sure everything looks right before you proceed to payment.</p>
+    </div>
+
+    {% if itemList %}
+    <div class="cart-layout">
+      <div>
+        <div class="section-bar">
+          <div>
+            <div class="section-bar-title">Items</div>
+            <div class="section-bar-sub">{{ itemList|length }} item{{ itemList|length|pluralize }} selected</div>
+          </div>
+        </div>
+        <div class="cart-items-panel">
+          {% for item in itemList %}
+          <div class="cart-item">
+            <img src="{{ item.picture }}" alt="{{ item.name }}" class="cart-item-img" />
+            <div class="cart-item-info">
+              <div class="cart-item-name">{{ item.name }}</div>
+              <div class="cart-item-desc">{{ item.description }}</div>
+            </div>
+            <div class="cart-item-price">₹{{ item.price }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <div class="cart-summary-title">Order summary</div>
+        {% for item in itemList %}
+        <div class="cart-summary-row">
+          <span>{{ item.name }}</span>
+          <span>₹{{ item.price }}</span>
+        </div>
+        {% endfor %}
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span class="total-amt">₹{{ total_price }}</span>
+        </div>
+        <div class="cart-cta">
+          <form action="{% url 'checkout' username %}">
+            <button type="submit" class="btn-primary btn-block">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Continue to payment
+            </button>
+          </form>
+        </div>
+        <div class="pay-secure">🔒 Secured by Razorpay · 256-bit SSL</div>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div class="empty-title">Your cart is empty</div>
+      <div class="empty-body">Head back to the restaurants page and add something you're craving.</div>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+        </div>
+        <span class="footer-name">Cravio</span>
+      </div>
+      <span>Signed in as <strong>{{ username }}</strong> · Taxes &amp; delivery charges may apply</span>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,43 +1,134 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h3>Welcome {{username}}!</h3>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ restaurant.name }} Menu · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
 
-    <a href="{% url 'show_cart' username %}">Go to cart</a>
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Build your order</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-user">
+          <div class="nav-avatar">{{ username|slice:":1"|upper }}</div>
+          {{ username }}
+        </div>
+        <a href="{% url 'show_cart' username %}" class="cart-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Cart
+          <span class="cart-count" data-cart-badge>{{ cart_count|default:0 }}</span>
+        </a>
+      </div>
+    </nav>
+  </div>
 
-    <!-- show current menu -->
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Item name</th>
-          <th>Picture</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Is veg?</th>
-          <th>Operation</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in itemList %}
-        <tr>
-          <td>{{ item.name }}</td>
-          <td>
-            <img src="{{ item.picture }}" />
-          </td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.price }}</td>
-          <td>{{ item.vegeterian }}</td>
-          <td>
-            <a href="{% url 'add_to_cart' item.id username %}"> Add to cart </a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </body>
+  <!-- Toast notification -->
+  <div class="toast" data-toast>
+    <span class="toast-dot"></span>
+    Added to cart!
+  </div>
+
+  <main class="page-wrap">
+
+    <div class="menu-hero">
+      <img src="{{ restaurant.picture }}" alt="{{ restaurant.name }}" class="menu-hero-img" />
+      <div>
+        <div class="menu-hero-name">{{ restaurant.name }}</div>
+        <div class="menu-hero-meta">
+          <span>{{ restaurant.cuisine }}</span>
+          <span>·</span>
+          <span>★ {{ restaurant.rating }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-bar">
+      <div>
+        <div class="section-bar-title">Full menu</div>
+        <div class="section-bar-sub">Tap any item to add it to your cart</div>
+      </div>
+    </div>
+
+    {% if itemList %}
+    <div class="menu-grid">
+      {% for item in itemList %}
+      <div class="menu-card">
+        <div class="menu-card-img">
+          <img src="{{ item.picture }}" alt="{{ item.name }}" loading="lazy" />
+        </div>
+        <div class="menu-card-body">
+          <div class="menu-card-top">
+            <div class="menu-card-name">{{ item.name }}</div>
+            {% if item.vegeterian %}
+            <div class="veg-badge veg-badge--veg" title="Vegetarian"></div>
+            {% else %}
+            <div class="veg-badge veg-badge--nonveg" title="Non-vegetarian"></div>
+            {% endif %}
+          </div>
+          <div class="menu-card-desc">{{ item.description }}</div>
+          <div class="menu-card-footer">
+            <div class="menu-price">₹{{ item.price }}</div>
+            <a href="{% url 'add_to_cart' item.id username %}" class="btn-add" data-add-to-cart>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+      </div>
+      <div class="empty-title">Menu coming soon</div>
+      <div class="empty-body">This restaurant hasn't added items yet. Check back later.</div>
+    </div>
+    {% endif %}
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+        </div>
+        <span class="footer-name">Cravio</span>
+      </div>
+      <span>Secure checkout powered by Razorpay</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var toast = document.querySelector('[data-toast]');
+      if (toast && params.get('added') === '1') {
+        toast.classList.add('show');
+        setTimeout(function () { toast.classList.remove('show'); }, 2400);
+        params.delete('added');
+        var next = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        window.history.replaceState({}, '', next);
+      }
+    })();
+  </script>
+
+</body>
 </html>

@@ -1,27 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Restaurant</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Restaurant · Cravio</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body>
-    <form action="{% url 'add_restaurant' %}" method="POST">
+
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Admin console</div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="auth-wrap">
+    <div class="auth-card" style="max-width:480px">
+      <div class="auth-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+          <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+        </svg>
+      </div>
+      <h1 class="auth-title">Add a new restaurant</h1>
+      <p class="auth-sub">Capture the essentials — we'll present it cleanly to your customers.</p>
+
+      <form action="{% url 'add_restaurant' %}" method="POST" class="form-stack">
         {% csrf_token %}
-        <label>Restaurant name </label>
-        <input type="text" name="name">
-        <br><br>
-        <label>Picture url </label>
-        <input type="text" name="picture">
-        <br><br>
-        <label>Cuisine </label>
-        <input type="text" name="cuisine">
-        <br><br>
-        <label>Rating</label>
-        <input type="number" name="rating" min="0" max="5" step="0.5">
-        <br><br>
-        <br><br>
-        <button type="submit">Add Restaurant</button>
-    </form>
+        <div class="field">
+          <label class="field-label">Restaurant name</label>
+          <input type="text" name="name" class="field-input" placeholder="e.g. The Spice House" required />
+        </div>
+        <div class="field">
+          <label class="field-label">Picture URL</label>
+          <input type="url" name="picture" class="field-input" placeholder="https://…" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Cuisine</label>
+            <input type="text" name="cuisine" class="field-input" placeholder="Indian · Chinese · Café…" />
+          </div>
+          <div class="field">
+            <label class="field-label">Rating</label>
+            <input type="number" name="rating" min="0" max="5" step="0.5" class="field-input" placeholder="4.5" required/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-block">Add restaurant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -1,71 +1,131 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Checkout</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <link rel="stylesheet" href="{% static 'delivery/site-theme.css' %}" />
-  </head>
-  <body>
-    <h1>Checkout</h1>
-    <h2>Welcome, {{ username }}</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout · Cravio</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
+
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="nav-brand">
+        <div class="nav-logo-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-wordmark">Cravio</div>
+          <div class="nav-tagline">Secure checkout</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="nav-user">
+          <div class="nav-avatar">{{ username|slice:":1"|upper }}</div>
+          Almost there, {{ username }}
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="page-wrap page-wrap--narrow">
 
     {% if error %}
-    <p style="color: red">{{ error }}</p>
+    <div class="fail-wrap" style="min-height:auto;padding:0;margin-top:3rem;">
+      <div class="fail-card">
+        <div class="fail-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <div class="fail-label">Payment issue</div>
+        <h1 class="fail-title">We couldn't start your payment</h1>
+        <p class="fail-body">{{ error }}</p>
+      </div>
+    </div>
     {% else %}
 
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in cart_items %}
-        <tr>
-          <td>{{ item.name }}</td>
-          <td>₹{{ item.price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <h3>Total: ₹{{ total_price }}</h3>
+    <div class="page-header">
+      <h1 class="page-title">Order summary</h1>
+      <p class="page-sub">Review your basket and pay securely with Razorpay.</p>
+    </div>
 
-    <button id="rzp-button">Pay with Razorpay</button>
-    {% endif %}
+    <div class="checkout-layout">
+      <div class="checkout-panel">
+        <div class="checkout-panel-head">Items in your order</div>
+        {% for item in cart_items %}
+        <div class="checkout-item">
+          <span class="checkout-item-name">{{ item.name }}</span>
+          <span class="checkout-item-price">₹{{ item.price }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="pay-card">
+        <div class="pay-title">Payment summary</div>
+        {% for item in cart_items %}
+        <div class="pay-row">
+          <span>{{ item.name }}</span>
+          <span>₹{{ item.price }}</span>
+        </div>
+        {% endfor %}
+        <hr class="pay-divider" />
+        <div class="pay-total">
+          <span>Total payable</span>
+          <span class="pay-total-amt">₹{{ total_price }}</span>
+        </div>
+        <div class="pay-btn">
+          <button id="rzp-button" class="btn-primary btn-block">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Pay securely with Razorpay
+          </button>
+        </div>
+        <div class="pay-secure">🔒 256-bit SSL · Powered by Razorpay</div>
+      </div>
+    </div>
 
     <script>
-        var options = {
-            "key": "{{ razorpay_key_id }}",  // Razorpay API key
-            "amount": "{{ amount_paise }}", // Amount in paisa
-            "currency": "INR",
-            "name": "Meal Buddy",
-            "description": "Order Payment",
-            "order_id": "{{ order_id }}",  // Razorpay order ID
-            "handler": function (response) {
-                alert("Payment Successful!");
-                // Redirect to the orders page
-                window.location.href = "{% url 'orders' username %}";
-            },
-            "prefill": {
-                "name": "{{ username }}",
-                "email": "customer@example.com",
-                "contact": "9999999999"
-            },
-            "theme": {
-                "color": "#528FF0"
-            }
-        };
-        var rzp = new Razorpay(options);
-    
-        document.getElementById('rzp-button').onclick = function(e) {
-            rzp.open();
-            e.preventDefault();
-        }
+      var options = {
+        key: "{{ razorpay_key_id }}",
+        amount: "{{ amount_paise }}",
+        currency: "INR",
+        name: "Cravio",
+        description: "Order payment",
+        order_id: "{{ order_id }}",
+        handler: function (response) {
+          window.location.href = "{% url 'orders' username %}";
+        },
+        prefill: {
+          name: "{{ username }}",
+          email: "customer@example.com",
+          contact: "9999999999",
+        },
+        theme: { color: "#1a6b3c" },
+      };
+      var rzp = new Razorpay(options);
+      document.getElementById("rzp-button").onclick = function (e) {
+        rzp.open();
+        e.preventDefault();
+      };
     </script>
-    
-  </body>
+    {% endif %}
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+        </div>
+        <span class="footer-name">Cravio</span>
+      </div>
+      <span>Transactions are encrypted and routed via Razorpay</span>
+    </div>
+  </footer>
+
+</body>
 </html>

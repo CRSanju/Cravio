@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render  # type: ignore
+from django.shortcuts import get_object_or_404, render, redirect  # type: ignore
 from django.http import HttpResponse  # type: ignore
 from django.conf import settings  # type: ignore
 from .models import Customer, Restaurant, Item, Cart
@@ -73,7 +73,7 @@ def add_restaurant(request):
         name = request.POST.get("name")
         picture = request.POST.get("picture")
         cuisine = request.POST.get("cuisine")
-        rating = request.POST.get("rating")
+        rating = float(request.POST.get("rating", 0))
 
         try:
             Restaurant.objects.get(name=name)
@@ -131,7 +131,7 @@ def open_update_menu(request, restaurant_id):
     # itemList = Item.objects.all()
     return render(
         request,
-        "delivery/update_menu.html",
+        "update_menu.html",
         {"itemList": itemList, "restaurant": restaurant},
     )
 
@@ -164,12 +164,23 @@ def update_menu(request, restaurant_id):
 def view_menu(request, restaurant_id, username):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     itemList = restaurant.items.all()
+    customer = Customer.objects.get(username=username)
+    cart = Cart.objects.filter(customer=customer).first()
+    cart_count = cart.items.count() if cart else 0
     # itemList = Item.objects.all()
     return render(
         request,
         "customer_menu.html",
-        {"itemList": itemList, "restaurant": restaurant, "username": username},
+        {
+            "itemList": itemList,
+            "restaurant": restaurant,
+            "username": username,
+            "cart_count": cart_count,
+        },
     )
+
+def admin_home(request):
+    return render(request, "admin_home.html")
 
 
 def add_to_cart(request, item_id, username):
@@ -177,7 +188,13 @@ def add_to_cart(request, item_id, username):
     customer = Customer.objects.get(username=username)
     cart, created = Cart.objects.get_or_create(customer=customer)
     cart.items.add(item)
-    return HttpResponse("added to cart")
+    # Redirect back to menu with a lightweight success flag.
+    # Prefer HTTP referrer if present, otherwise fall back to the restaurant menu.
+    next_url = request.META.get("HTTP_REFERER")
+    if next_url:
+        joiner = "&" if "?" in next_url else "?"
+        return redirect(f"{next_url}{joiner}added=1")
+    return redirect("view_menu", restaurant_id=item.restaurant_id, username=username)
 
 def show_cart(request, username):
     customer = Customer.objects.get(username = username)
