@@ -7,11 +7,10 @@
   <title>{{ restaurant.name }} Menu · Cravio</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
-<body>
-
+<body class="food-doodle-theme">
   <div class="nav-wrap">
-    <nav class="nav">
-      <div class="nav-brand">
+    <nav class="nav nav--app">
+      <a href="/" class="nav-brand" style="text-decoration: none; color: inherit">
         <div class="nav-logo-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
@@ -20,14 +19,23 @@
         </div>
         <div>
           <div class="nav-wordmark">Cravio</div>
-          <div class="nav-tagline">Build your order</div>
+          <div class="nav-tagline"><span class="nav-loc-pill">📍 Near you</span> · {{ restaurant.name }}</div>
         </div>
+      </a>
+      <div class="nav-center">
+        <label class="nav-search" aria-label="Search menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" placeholder="Search dishes on this menu…" autocomplete="off" />
+        </label>
       </div>
       <div class="nav-right">
         <div class="nav-user">
           <div class="nav-avatar">{{ username|slice:":1"|upper }}</div>
           {{ username }}
         </div>
+        <a href="{% url 'orders' username %}" class="nav-icon-btn" title="Orders" aria-label="Orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+        </a>
         <a href="{% url 'show_cart' username %}" class="cart-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           Cart
@@ -37,14 +45,12 @@
     </nav>
   </div>
 
-  <!-- Toast notification -->
   <div class="toast" data-toast>
     <span class="toast-dot"></span>
     Added to cart!
   </div>
 
   <main class="page-wrap">
-
     <div class="menu-hero">
       <img src="{{ restaurant.picture }}" alt="{{ restaurant.name }}" class="menu-hero-img" />
       <div>
@@ -53,44 +59,80 @@
           <span>{{ restaurant.cuisine }}</span>
           <span>·</span>
           <span>★ {{ restaurant.rating }}</span>
+          <span>·</span>
+          <span class="tag-free" style="font-size: 0.7rem">Free delivery</span>
         </div>
-      </div>
-    </div>
-
-    <div class="section-bar">
-      <div>
-        <div class="section-bar-title">Full menu</div>
-        <div class="section-bar-sub">Tap any item to add it to your cart</div>
       </div>
     </div>
 
     {% if itemList %}
-    <div class="menu-grid">
-      {% for item in itemList %}
-      <div class="menu-card">
-        <div class="menu-card-img">
-          <img src="{{ item.picture }}" alt="{{ item.name }}" loading="lazy" />
+    <div class="menu-page">
+      <aside class="menu-sidebar" aria-label="Menu categories">
+        <a href="#cat-veg" class="menu-cat-link is-active">Vegetarian</a>
+        <a href="#cat-nonveg" class="menu-cat-link">Non-vegetarian</a>
+      </aside>
+      <div class="menu-main">
+        <div class="section-bar">
+          <div>
+            <div class="section-bar-title">Full menu</div>
+            <div class="section-bar-sub">Tap Add to put items in your cart</div>
+          </div>
         </div>
-        <div class="menu-card-body">
-          <div class="menu-card-top">
-            <div class="menu-card-name">{{ item.name }}</div>
-            {% if item.vegeterian %}
-            <div class="veg-badge veg-badge--veg" title="Vegetarian"></div>
-            {% else %}
-            <div class="veg-badge veg-badge--nonveg" title="Non-vegetarian"></div>
-            {% endif %}
+
+        <h2 id="cat-veg" class="menu-section-title">Vegetarian</h2>
+        <div class="menu-grid">
+          {% for item in itemList %}
+          {% if item.vegeterian %}
+          <div class="menu-card">
+            <div class="menu-card-img">
+              <img src="{{ item.picture }}" alt="{{ item.name }}" loading="lazy" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <div class="menu-card-name">{{ item.name }}</div>
+                <div class="veg-badge veg-badge--veg" title="Vegetarian"></div>
+              </div>
+              <div class="menu-card-desc">{{ item.description }}</div>
+              <div class="menu-card-footer">
+                <div class="menu-price">₹{{ item.price }}</div>
+                <a href="{% url 'add_to_cart' item.id username %}" class="btn-add" data-add-to-cart>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add
+                </a>
+              </div>
+            </div>
           </div>
-          <div class="menu-card-desc">{{ item.description }}</div>
-          <div class="menu-card-footer">
-            <div class="menu-price">₹{{ item.price }}</div>
-            <a href="{% url 'add_to_cart' item.id username %}" class="btn-add" data-add-to-cart>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add
-            </a>
+          {% endif %}
+          {% endfor %}
+        </div>
+
+        <h2 id="cat-nonveg" class="menu-section-title">Non-vegetarian</h2>
+        <div class="menu-grid">
+          {% for item in itemList %}
+          {% if not item.vegeterian %}
+          <div class="menu-card">
+            <div class="menu-card-img">
+              <img src="{{ item.picture }}" alt="{{ item.name }}" loading="lazy" />
+            </div>
+            <div class="menu-card-body">
+              <div class="menu-card-top">
+                <div class="menu-card-name">{{ item.name }}</div>
+                <div class="veg-badge veg-badge--nonveg" title="Non-vegetarian"></div>
+              </div>
+              <div class="menu-card-desc">{{ item.description }}</div>
+              <div class="menu-card-footer">
+                <div class="menu-price">₹{{ item.price }}</div>
+                <a href="{% url 'add_to_cart' item.id username %}" class="btn-add" data-add-to-cart>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add
+                </a>
+              </div>
+            </div>
           </div>
+          {% endif %}
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
     </div>
     {% else %}
     <div class="empty-state">
@@ -101,7 +143,6 @@
       <div class="empty-body">This restaurant hasn't added items yet. Check back later.</div>
     </div>
     {% endif %}
-
   </main>
 
   <footer class="footer">
@@ -127,6 +168,19 @@
         var next = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
         window.history.replaceState({}, '', next);
       }
+      var links = document.querySelectorAll('.menu-cat-link');
+      var sections = document.querySelectorAll('.menu-section-title');
+      function onScroll() {
+        var id = '';
+        sections.forEach(function (sec) {
+          if (sec.getBoundingClientRect().top <= 120) id = sec.id;
+        });
+        links.forEach(function (a) {
+          a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+        });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     })();
   </script>
 

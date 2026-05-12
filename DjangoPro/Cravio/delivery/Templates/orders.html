@@ -7,7 +7,7 @@
   <title>Order Confirmed · Cravio</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
-<body>
+<body class="food-doodle-theme">
   <div class="confirm-wrap">
     <div class="confirm-card">
       <div class="confirm-icon">
@@ -42,7 +42,7 @@
 
       <div class="confirm-actions">
         {% if cart_items %}
-        <a href="{% url 'customer_menu' cart_items.0.restaurant.id username %}" class="btn-primary">Back to restaurants</a>
+        <a href="{% url 'view_menu' cart_items.0.restaurant.id username %}" class="btn-primary">Back to menu</a>
         {% else %}
         <a href="/" class="btn-secondary">Back to home</a>
         {% endif %}

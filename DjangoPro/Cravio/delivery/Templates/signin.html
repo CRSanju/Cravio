@@ -7,33 +7,52 @@
   <title>Sign in · Cravio</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
-<body>
+<body class="auth-split-page">
   <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
-          <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
-        </svg>
+    <div class="auth-split">
+      <div class="auth-split-panel auth-split-panel--brand">
+        <div class="auth-split-brand-inner">
+          <p class="auth-split-kicker">Cravio</p>
+          <h1 class="auth-split-headline">Good food delivered fast, at your door.</h1>
+          <p class="auth-split-lede">Sign in to explore restaurants, fill your cart, and pay securely with Razorpay.</p>
+        </div>
       </div>
-      <h1 class="auth-title">Welcome back</h1>
-      <p class="auth-sub">Sign in to Cravio to explore restaurants and your saved cart.</p>
+      <div class="auth-split-panel auth-split-panel--form">
+        <div class="auth-card">
+          <div class="auth-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+              <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+            </svg>
+          </div>
+          <h1 class="auth-title">Welcome back</h1>
+          <p class="auth-sub">Sign in to Cravio to explore restaurants and your saved cart.</p>
 
-      <form action="{% url 'signin' %}" method="post" class="form-stack">
-        {% csrf_token %}
-        <div class="field">
-          <label class="field-label">Username</label>
-          <input type="text" name="username" class="field-input" placeholder="Your username" required autofocus />
+          <form action="{% url 'signin' %}" method="post" class="form-stack">
+            {% csrf_token %}
+            <div class="field">
+              <label class="field-label" for="username">Username</label>
+              <input type="text" name="username" id="username" class="field-input" placeholder="Your username" required autofocus />
+            </div>
+            <div class="field">
+              <label class="field-label" for="password">Password</label>
+              <input type="password" name="password" id="password" class="field-input" placeholder="••••••••" required />
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary btn-block">Sign in</button>
+              <p class="form-hint">New to Cravio? <a href="{% url 'open_signup' %}">Create a free account</a></p>
+            </div>
+          </form>
+
+          <div class="auth-oauth" aria-hidden="true">
+            <span class="auth-oauth-label">More options soon</span>
+            <div class="auth-oauth-icons">
+              <span class="auth-oauth-faux" title="Coming soon">G</span>
+              <span class="auth-oauth-faux" title="Coming soon">⌘</span>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <label class="field-label">Password</label>
-          <input type="password" name="password" class="field-input" placeholder="••••••••" required />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary btn-block">Sign in</button>
-          <p class="form-hint">New to Cravio? <a href="{% url 'open_signup' %}">Create a free account</a></p>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </body>

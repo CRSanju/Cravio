@@ -7,11 +7,10 @@
   <title>Add Restaurant · Cravio</title>
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
-<body>
-
-  <div class="nav-wrap">
-    <nav class="nav">
-      <div class="nav-brand">
+<body class="food-doodle-theme admin-app">
+  <div class="admin-shell">
+    <aside class="admin-sb" aria-label="Admin navigation">
+      <div class="admin-sb-brand">
         <div class="nav-logo-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
@@ -19,50 +18,88 @@
           </svg>
         </div>
         <div>
-          <div class="nav-wordmark">Cravio</div>
-          <div class="nav-tagline">Admin console</div>
+          <div class="nav-wordmark" style="color: #fff">Cravio</div>
+          <div class="nav-tagline" style="color: rgba(255,255,255,0.75)">Admin</div>
         </div>
       </div>
-    </nav>
-  </div>
-
-  <div class="auth-wrap">
-    <div class="auth-card" style="max-width:480px">
-      <div class="auth-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
-          <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
-        </svg>
+      <nav class="admin-sb-nav">
+        <a href="{% url 'admin_home' %}" class="admin-sb-link {% if request.resolver_match.url_name == 'admin_home' %}is-active{% endif %}">Dashboard</a>
+        <a href="{% url 'open_show_restaurant' %}" class="admin-sb-link {% if request.resolver_match.url_name == 'open_show_restaurant' or request.resolver_match.url_name == 'open_update_restaurant' or request.resolver_match.url_name == 'open_update_menu' %}is-active{% endif %}">Restaurants</a>
+        <a href="{% url 'open_add_restaurant' %}" class="admin-sb-link {% if request.resolver_match.url_name == 'open_add_restaurant' %}is-active{% endif %}">Add restaurant</a>
+      </nav>
+      <div class="admin-sb-foot">
+        <a href="{% url 'open_signin' %}" class="admin-sb-link" style="padding-left: 0.35rem">Sign out</a>
+        <div>Cravio © 2026</div>
       </div>
-      <h1 class="auth-title">Add a new restaurant</h1>
-      <p class="auth-sub">Capture the essentials — we'll present it cleanly to your customers.</p>
+    </aside>
 
-      <form action="{% url 'add_restaurant' %}" method="POST" class="form-stack">
-        {% csrf_token %}
-        <div class="field">
-          <label class="field-label">Restaurant name</label>
-          <input type="text" name="name" class="field-input" placeholder="e.g. The Spice House" required />
-        </div>
-        <div class="field">
-          <label class="field-label">Picture URL</label>
-          <input type="url" name="picture" class="field-input" placeholder="https://…" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label class="field-label">Cuisine</label>
-            <input type="text" name="cuisine" class="field-input" placeholder="Indian · Chinese · Café…" />
+    <div class="admin-content">
+      <div class="nav-wrap">
+        <nav class="nav">
+          <div class="nav-brand">
+            <div>
+              <div class="nav-wordmark">Add restaurant</div>
+              <div class="nav-tagline">New listing</div>
+            </div>
           </div>
-          <div class="field">
-            <label class="field-label">Rating</label>
-            <input type="number" name="rating" min="0" max="5" step="0.5" class="field-input" placeholder="4.5" required/>
+          <div class="nav-right">
+            <a href="{% url 'open_show_restaurant' %}" class="btn-secondary btn-sm">← All restaurants</a>
+          </div>
+        </nav>
+      </div>
+
+      <main class="page-wrap page-wrap--narrow">
+        <div class="auth-wrap" style="min-height: auto; padding: 0 0 2rem; background: transparent">
+          <div class="auth-card" style="max-width: 480px">
+            <div class="auth-logo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/>
+                <circle cx="12" cy="9" r="2.5" fill="#ffffff" stroke="none"/>
+              </svg>
+            </div>
+            <h1 class="auth-title">Add a new restaurant</h1>
+            <p class="auth-sub">Capture the essentials — we'll present it cleanly to your customers.</p>
+
+            <form action="{% url 'add_restaurant' %}" method="POST" class="form-stack">
+              {% csrf_token %}
+              <div class="field">
+                <label class="field-label">Restaurant name</label>
+                <input type="text" name="name" class="field-input" placeholder="e.g. The Spice House" required />
+              </div>
+              <div class="field">
+                <label class="field-label">Picture URL</label>
+                <input type="url" name="picture" class="field-input" placeholder="https://…" />
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">Cuisine</label>
+                  <input type="text" name="cuisine" class="field-input" placeholder="Indian · Chinese · Café…" />
+                </div>
+                <div class="field">
+                  <label class="field-label">Rating</label>
+                  <input type="number" name="rating" min="0" max="5" step="0.5" class="field-input" placeholder="4.5" required />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary btn-block">Add restaurant</button>
+              </div>
+            </form>
           </div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="btn-primary btn-block">Add restaurant</button>
+      </main>
+
+      <footer class="footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 4 5 4 9c0 5.25 8 13 8 13s8-7.75 8-13c0-4-4-7-8-7z"/><circle cx="12" cy="9" r="2.5" fill="#fff" stroke="none"/></svg>
+            </div>
+            <span class="footer-name">Cravio</span>
+          </div>
+          <span>Admin panel · Built with Django</span>
         </div>
-      </form>
+      </footer>
     </div>
   </div>
-
 </body>
 </html>
