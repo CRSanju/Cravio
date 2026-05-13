@@ -158,7 +158,7 @@ def update_menu(request, restaurant_id):
                 vegeterian=vegeterian,
                 picture=picture,
             )
-    return render(request, "admin_home.html")
+    return render(request, "show_restaurants.html")
 
 
 def view_menu(request, restaurant_id, username):
