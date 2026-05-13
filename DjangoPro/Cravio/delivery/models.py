@@ -2,11 +2,11 @@ from django.db import models  # type: ignore[import]
 
 # Create your models here.
 class Customer(models.Model):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-    email = models.CharField(max_length=20)
-    mobile =  models.CharField(max_length=20)
-    address = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
+    mobile =  models.CharField(max_length=15)
+    address = models.CharField(max_length=255)
 
 class Restaurant(models.Model):
     name = models.CharField(max_length = 20)
