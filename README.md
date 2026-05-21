@@ -24,12 +24,19 @@ https://cravio-zz6e.onrender.com/
 
 ## Tech Stack
 
+### Backend
 - Python
 - Django
-- PostgreSQL
+
+### Frontend
 - HTML
 - CSS
 - JavaScript
+
+### Database
+- PostgreSQL
+
+### Deployment
 - Render
 
 ---
@@ -42,3 +49,30 @@ git clone https://github.com/CRSanju/Cravio.git
 cd Cravio
 
 python manage.py runserver
+```
+
+---
+
+## Environment Variables
+
+```properties
+DATABASE_URL=
+
+DATABASE_USERNAME=
+
+DATABASE_PASSWORD=
+
+SECRET_KEY=
+```
+
+---
+
+## Author
+
+### Sanju R
+
+GitHub:
+https://github.com/CRSanju
+
+LinkedIn:
+https://www.linkedin.com/in/crsanju
