@@ -51,21 +51,6 @@ cd Cravio
 python manage.py runserver
 ```
 
----
-
-## Environment Variables
-
-```properties
-DATABASE_URL=
-
-DATABASE_USERNAME=
-
-DATABASE_PASSWORD=
-
-SECRET_KEY=
-```
-
----
 
 ## Author
 
